@@ -1,5 +1,6 @@
 from psychopy import visual, core, event
 from itertools import chain
+from AdjustableBar import AdjustableBar
 win = visual.Window([1280, 768])
 mouse = event.Mouse(win=win)
 event.globalKeys.add(key='q', func=core.quit, name='shutdown')
@@ -24,21 +25,19 @@ for i, pos in enumerate([-.75] + x_axis_breaks):
     t.autoDraw = True
 
 
-rect = visual.Rect(win, pos=(-.75 + .75/2, .25), width=.75, height=.25,
-                   lineColor="#000000", fillColor="#FF0000", lineWidth=3, autoDraw=True)
-handle = visual.Rect(win, pos=(0, .25), width=.015, height=.015*(1280/768),
-                     lineColor="#000000", fillColor="#0000FF", lineWidth=1, autoDraw=True)
+rect = AdjustableBar(win, pos=(-.75 + .75/2, .25), width=.75, height=.25,
+                     lineColor="#000000", fillColor="#FF0000", lineWidth=3, autoDraw=True)
 
 win.flip()
 
 while True:
-    if mouse.isPressedIn(handle):
+    if mouse.isPressedIn(rect.handle):
         rect.opacity = .2
         while mouse.getPressed()[0]:
             pos = mouse.getPos()[0]
             if -.75 < pos < .75:
-                delta = pos - handle.pos[0]
-                handle.pos = (pos, handle.pos[1])
+                delta = pos - rect.handle.pos[0]
+                rect.handle.pos = (pos, rect.handle.pos[1])
                 rect.width = rect.width + delta
                 rect.pos = (-.75 + rect.width/2, .25)
                 win.flip()
