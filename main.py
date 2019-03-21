@@ -40,5 +40,7 @@ while True:
                 delta = pos - handle.pos[0]
                 handle.pos = (pos, handle.pos[1])
                 rect.width = rect.width + delta
+                rect.pos = (-.75 + rect.width/2, .25)
                 win.flip()
         rect.opacity = 1
+        win.flip()
