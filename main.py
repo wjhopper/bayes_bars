@@ -7,7 +7,19 @@ win = visual.Window([1280, 768])
 mouse = event.Mouse(win=win)
 event.globalKeys.add(key='q', func=core.quit, name='shutdown')
 
-ax = AxisStim(win)  # autodraws
+ax = AxisStim(win, y_labels=('Eats\nCookies', "Doesn't Eat\nCookies"))  # autodraws
+
+problem_text = """
+- 20% of people eat cookies.
+- 10% of people who eat cookies also eat brownies.
+- 95% of people who do not eat cookies eat brownies
+"""
+
+problem = visual.TextStim(win, text=problem_text, height=.075, pos=(0, .85), wrapWidth=1.5)
+problem.autoDraw=True
+
+prompt = visual.TextStim(win, text="Press Enter to finalize the bars", height=.075, pos=(0, -.85), wrapWidth=1.5)
+prompt.autoDraw = False  # This is implied, but has to be explicitly set before it can be set, because of shennanigans
 
 bars = {"A_major": AdjustableBar(win, bounds=(-.75, .75), pos=(-.75 + .75 / 2, .25), width=.75, height=.25,
                                  lineColor="#000000", fillColor="#000000", lineWidth=3,
@@ -34,13 +46,17 @@ while True:
     # Activate (draw) bars one at a time
     if all([x.adjusted for x in active_rects]) and names:
         rect = bars[names[0]]
-        names = names[1:]
+        names.pop(0)
         rect.autoDraw = True
         rect.focused = True # Needs to be set after autodraw to make sure handle is drawn on top of bar
         for r in active_rects:
             r.focused = False
         active_rects.append(rect)
         win.flip()
+
+    if prompt.autoDraw:
+        if event.getKeys(keyList=['return']):
+            break
 
     # Loop looking for mouse clicks
     if mouse.getPressed()[0]:
@@ -89,3 +105,8 @@ while True:
                     minor_bar.pos = (-.75 + rect.width / 4, minor_bar.pos[1])
             if "minor" in rect.name:
                 bars[prefix + "_major"].bounds = (rect.pos[0] + rect.width / 2, .75)
+
+    # Names is empty after all bars have been activated, so at this point show the prompt
+            if not names and not prompt.autoDraw:
+                prompt.autoDraw = True
+                win.flip()
