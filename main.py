@@ -18,11 +18,15 @@ for x in zip([.75, .75, .75/2, .75/2], [.25, -.25, .25, -.25], ["#000000", "#000
 
 win.flip()
 
-active_rects = []
-activate_new = True
+rect = rect_list.pop(0)
+rect.autoDraw = True
+rect.focused = True
+active_rects = [rect]
+win.flip()
+
 while True:
-    # Activate (draw) bars on at a time
-    if activate_new and rect_list:
+    # Activate (draw) bars one at a time
+    if all([x.adjusted for x in active_rects]) and rect_list:
         rect = rect_list.pop(0)
         rect.autoDraw = True
         rect.focused = True
@@ -31,7 +35,6 @@ while True:
         active_rects.append(rect)
         win.flip()
 
-    activate_new = False
     # Loop looking for mouse clicks
     if mouse.getPressed()[0]:
         pos = mouse.getPos()
@@ -48,6 +51,7 @@ while True:
 
             if rect.handle.contains(pos) and rect.focused:
                 rect.opacity = .2
+                rect.adjusted = True
                 while mouse.getPressed()[0]:
                     drag_pos = mouse.getPos()[0]
                     if -.75 < drag_pos < .75:
@@ -57,5 +61,4 @@ while True:
                         rect.pos = (-.75 + rect.width/2, rect.pos[1])
                         win.flip()
                 rect.opacity = 1
-                activate_new = True
                 win.flip()

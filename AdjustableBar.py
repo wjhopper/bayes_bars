@@ -9,6 +9,7 @@ class AdjustableBar(Rect):
         self.handle = Rect(win, pos=(-.75 + self.width, self.pos[1]), width=.015, height=.015 * (win.size[0]/win.size[1]),
                            lineColor="#000000", fillColor="#0000FF", lineWidth=1, autoDraw=True)
         self._focused = True
+        self.adjusted = False
 
     @property
     def focused(self):
