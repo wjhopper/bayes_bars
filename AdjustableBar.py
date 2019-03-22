@@ -1,16 +1,17 @@
 from psychopy.visual.rect import Rect
-
+from psychopy.tools.attributetools import attributeSetter
+from psychopy.tools.arraytools import val2array
 
 class AdjustableBar(Rect):
-    def __init__(self, win, bounds=(-1, 1), **kwargs):
+    def __init__(self, win, focused=True, bounds=(-1, 1), **kwargs):
         # Initialize the rectangle
         super(AdjustableBar, self).__init__(win, **kwargs)
         # Create the "handle" point
-        self.handle = Rect(win, pos=(-.75 + self.width, self.pos[1]), width=.015, height=.015 * (win.size[0]/win.size[1]),
-                           lineColor="#000000", fillColor="#0000FF", lineWidth=1, autoDraw=True)
-        self._focused = True
-        self.adjusted = False
+        self.handle = Rect(win, pos=(self.pos[0] + self.width/2, self.pos[1]), width=.015, height=.015 * (win.size[0]/win.size[1]),
+                           lineColor="#000000", fillColor="#0000FF", lineWidth=1, autoDraw=focused)
+        self._focused = focused
         self._bounds = bounds
+        self.adjusted = False
 
     @property
     def focused(self):
@@ -40,3 +41,15 @@ class AdjustableBar(Rect):
             new_bounds = tuple(new_bounds)
 
         self._bounds = new_bounds
+
+    @attributeSetter
+    def pos(self, value):
+        self.__dict__['pos'] = val2array(value, False, False)
+        self._needVertexUpdate = True
+        self._needUpdate = True
+        try:
+            self.handle.pos = (self.pos[0] + self.width/2, self.pos[1])
+        except AttributeError:
+            pass
+
+
