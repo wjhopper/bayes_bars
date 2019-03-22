@@ -40,25 +40,29 @@ while True:
         pos = mouse.getPos()
 
         # Focus bars via clicks (focused = draw the handle)
-        for i in list(range(len(active_rects))):
-            if active_rects[i].contains(pos):
-                rect = active_rects[i]
-                rect.focused = True
-                for j in list(range(len(active_rects))):
-                    if j != i:
-                        active_rects[j].focused = False
-                win.flip()
+        clicked_bars = [x for x in active_rects if x.contains(pos)]
+        if len(clicked_bars) == 1:
+            rect = clicked_bars[0]
+        elif len(clicked_bars) > 1:
+            rect = clicked_bars[-1]
 
-            if rect.handle.contains(pos) and rect.focused:
-                rect.opacity = .2
-                rect.adjusted = True
-                while mouse.getPressed()[0]:
-                    drag_pos = mouse.getPos()[0]
-                    if -.75 < drag_pos < .75:
-                        delta = drag_pos - rect.handle.pos[0]
-                        rect.handle.pos = (drag_pos, rect.handle.pos[1])
-                        rect.width = rect.width + delta
-                        rect.pos = (-.75 + rect.width/2, rect.pos[1])
-                        win.flip()
-                rect.opacity = 1
-                win.flip()
+        if clicked_bars:
+            rect.focused = True
+            for j in active_rects:
+                if j is not rect:
+                    j.focused = False
+            win.flip()
+
+        if rect.handle.contains(pos) and rect.focused:
+            rect.opacity = .2
+            rect.adjusted = True
+            while mouse.getPressed()[0]:
+                drag_pos = mouse.getPos()[0]
+                if -.75 < drag_pos < .75:
+                    delta = drag_pos - rect.handle.pos[0]
+                    rect.handle.pos = (drag_pos, rect.handle.pos[1])
+                    rect.width = rect.width + delta
+                    rect.pos = (-.75 + rect.width/2, rect.pos[1])
+                    win.flip()
+            rect.opacity = 1
+            win.flip()
