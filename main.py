@@ -86,13 +86,22 @@ while True:
             rect.adjusted = True
             prefix = rect.name.split("_")[0]
             while mouse.getPressed()[0]:
+
                 drag_pos = mouse.getPos()[0]
-                if rect.bounds[0] < drag_pos < rect.bounds[1]:
+                if drag_pos <= rect.bounds[0]:
+                    rect.handle.pos = (rect.bounds[0], rect.handle.pos[1])
+                    rect.width = max(.01, rect.bounds[0] - -.75 + .01)
+                    rect.pos = (-.75 + rect.width/2, rect.pos[1])
+                elif rect.bounds[0] < drag_pos < rect.bounds[1]:
                     delta = drag_pos - rect.handle.pos[0]
                     rect.handle.pos = (drag_pos, rect.handle.pos[1])
                     rect.width = rect.width + delta
                     rect.pos = (-.75 + rect.width/2, rect.pos[1])
-                    win.flip()
+                elif rect.bounds[1] <= drag_pos:
+                    rect.handle.pos = (rect.bounds[1], rect.handle.pos[1])
+                    rect.width = rect.bounds[1] - rect.bounds[0] -.01
+                    rect.pos = (-.75 + rect.width/2, rect.pos[1])
+                win.flip()
 
             rect.opacity = 1
             win.flip()
