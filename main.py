@@ -21,16 +21,28 @@ problem.autoDraw=True
 prompt = visual.TextStim(win, text="Press Enter to finalize the bars", height=.075, pos=(0, -.85), wrapWidth=1.5)
 prompt.autoDraw = False  # This is implied, but has to be explicitly set before it can be set, because of shennanigans
 
-bars = {"A_major": AdjustableBar(win, bounds=(-.75, .75), pos=(-.75 + .75 / 2, .25), width=.75, height=.25,
+bars = {"A_major": AdjustableBar(win,
+                                 bounds=(ax.bounds[3], ax.bounds[1]),
+                                 pos=(ax.bounds[3] + ax.width/4, ax.bounds[0] - ax.height/4),
+                                 width=ax.width/2, height=ax.height/4,
                                  lineColor="#000000", fillColor="#000000", lineWidth=3,
                                  name="A_major", focused=False),
-        "B_major": AdjustableBar(win, bounds=(-.75, .75), pos=(-.75 + .75/2, -.25), width=.75, height=.25,
+        "B_major": AdjustableBar(win,
+                                 bounds=(ax.bounds[3], ax.bounds[1]),
+                                 pos=(ax.bounds[3] + ax.width/4, ax.bounds[2] + ax.height/4),
+                                 width=ax.width/2, height=ax.height/4,
                                  lineColor="#000000", fillColor="#0000FF", lineWidth=3,
                                  name="B_major", focused=False),
-        "A_minor": AdjustableBar(win, bounds=(-.75, 0), pos=(-.75 + .75/4, .25), width=.75/2, height=.25,
+        "A_minor": AdjustableBar(win,
+                                 bounds=(ax.bounds[3], ax.bounds[3]+ax.width/2),
+                                 pos=(ax.bounds[3] + ax.width/8, ax.bounds[0] - ax.height/4),
+                                 width=ax.width/4, height=ax.height/4,
                                  lineColor="#000000", fillColor="#f9f50c", lineWidth=3,
                                  name="A_minor", focused=False),
-        "B_minor": AdjustableBar(win, bounds=(-.75, 0), pos=(-.75 + .75 / 4, -.25), width=.75/2, height=.25,
+        "B_minor": AdjustableBar(win,
+                                 bounds=(ax.bounds[3], ax.bounds[3]+ax.width/2),
+                                 pos=(ax.bounds[3] + ax.width/8, ax.bounds[2] + ax.height/4),
+                                 width=ax.width/4, height=ax.height/4,
                                  lineColor="#000000", fillColor="#FF0000", lineWidth=3,
                                  name="B_minor", focused=False)
         }
