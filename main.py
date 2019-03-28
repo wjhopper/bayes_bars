@@ -102,17 +102,17 @@ while True:
                 drag_pos = mouse.getPos()[0]
                 if drag_pos <= rect.bounds[0]:
                     rect.handle.pos = (rect.bounds[0], rect.handle.pos[1])
-                    rect.width = max(.01, rect.bounds[0] - -.75 + .01)
-                    rect.pos = (-.75 + rect.width/2, rect.pos[1])
+                    rect.width = max(.0075, rect.bounds[0] - ax.bounds[3] + .0075)
+                    rect.pos = (ax.bounds[3] + rect.width/2, rect.pos[1])
                 elif rect.bounds[0] < drag_pos < rect.bounds[1]:
                     delta = drag_pos - rect.handle.pos[0]
                     rect.handle.pos = (drag_pos, rect.handle.pos[1])
                     rect.width = rect.width + delta
-                    rect.pos = (-.75 + rect.width/2, rect.pos[1])
+                    rect.pos = (ax.bounds[3] + rect.width/2, rect.pos[1])
                 elif rect.bounds[1] <= drag_pos:
                     rect.handle.pos = (rect.bounds[1], rect.handle.pos[1])
-                    rect.width = rect.bounds[1] - rect.bounds[0] -.01
-                    rect.pos = (-.75 + rect.width/2, rect.pos[1])
+                    rect.width = rect.bounds[1] - rect.bounds[0] - .0075
+                    rect.pos = (ax.bounds[3] + rect.width/2, rect.pos[1])
                 win.flip()
 
             rect.opacity = 1
@@ -120,12 +120,12 @@ while True:
 
             if "major" in rect.name:
                 minor_bar = bars[prefix + "_minor"]
-                minor_bar.bounds = (-.75, rect.pos[0] + rect.width / 2)
+                minor_bar.bounds = (ax.bounds[3], rect.pos[0] + rect.width / 2)
                 if minor_bar not in active_rects:
                     minor_bar.width = rect.width / 2 # width must be updated before pos! pos triggers moving of handle
-                    minor_bar.pos = (-.75 + rect.width / 4, minor_bar.pos[1])
+                    minor_bar.pos = (ax.bounds[3]+ rect.width / 4, minor_bar.pos[1])
             if "minor" in rect.name:
-                bars[prefix + "_major"].bounds = (rect.pos[0] + rect.width / 2, .75)
+                bars[prefix + "_major"].bounds = (rect.pos[0] + rect.width / 2, ax.bounds[1])
 
     # Names is empty after all bars have been activated, so at this point show the prompt
             if not names and not prompt.autoDraw:
