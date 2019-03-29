@@ -22,12 +22,12 @@ def AxisStim(win, pos=(0, 0), width=1.5, height=1, y_labels=("A", "B")):
 
     stimlist = [y_axis, x_axis]
 
-    for label, pos in zip(y_labels, [bounds[0]-height/4, bounds[2]+height/4]):
-        t = TextStim(win, label, pos=(bounds[3]-(.085*width), pos), height=height/15, color="#00000")
+    for label, p in zip(y_labels, [bounds[0]-height/4, bounds[2]+height/4]):
+        t = TextStim(win, label, pos=(bounds[3]-(.085*width), p), height=height/15, color="#00000")
         stimlist.append(t)
 
-    for i, pos in enumerate([bounds[3]] + x_axis_breaks):
-        t = TextStim(win, f'{(i / len(x_axis_breaks)) * 100:.0f}%', pos=(pos, bounds[2]-.05), height=height/20, color="#00000")
+    for i, p in enumerate([bounds[3]] + x_axis_breaks):
+        t = TextStim(win, f'{(i / len(x_axis_breaks)) * 100:.0f}%', pos=(p, bounds[2]-.05), height=height/20, color="#00000")
         stimlist.append(t)
 
     x = BufferImageStim(win, stim=stimlist)
