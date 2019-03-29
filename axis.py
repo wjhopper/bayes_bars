@@ -18,7 +18,7 @@ def AxisStim(win, pos=(0, 0), width=1.5, height=1, y_labels=("A", "B")):
                                      [bounds[2], bounds[2]-.025, bounds[2]] * len(x_axis_breaks))
                                  )
     x_axis = ShapeStim(win, vertices=[(bounds[3], bounds[2])] + x_axis_break_vertices + [(bounds[1], bounds[2])],
-                       lineColor="#00000", lineWidth=3, autoDraw=True)
+                       lineColor="#00000", lineWidth=3)
 
     stimlist = [y_axis, x_axis]
 

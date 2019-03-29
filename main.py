@@ -16,7 +16,7 @@ problem_text = """
 """
 
 problem = visual.TextStim(win, text=problem_text, height=.075, pos=(0, .85), wrapWidth=1.5)
-problem.autoDraw=True
+problem.autoDraw = True
 
 prompt = visual.TextStim(win, text="Press Enter to finalize the bars", height=.075, pos=(0, -.85), wrapWidth=1.5)
 prompt.autoDraw = False  # This is implied, but has to be explicitly set before it can be set, because of shennanigans
