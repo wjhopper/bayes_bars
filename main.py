@@ -6,6 +6,17 @@ from AdjustableBar import AdjustableBar
 win = visual.Window([1280, 768])
 mouse = event.Mouse(win=win)
 event.globalKeys.add(key='q', func=core.quit, name='shutdown')
+from trials import static_trial
+
+
+text = ["- {pA}% of people eat cookies.",
+        "- {pB_given_A}% of people who eat cookies also eat brownies.",
+        "- {pB_given_notA}% of people who do not eat cookies eat brownies"
+        ]
+
+ax = AxisStim(win, pos=(0, .125), height=1, width=1, y_labels=('Eats\nCookies', "Doesn't Eat\nCookies"))  # autodraws
+bars = static_trial(ax, text)
+ax.autoDraw = False
 
 ax = AxisStim(win, y_labels=('Eats\nCookies', "Doesn't Eat\nCookies"))  # autodraws
 
