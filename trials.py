@@ -4,7 +4,7 @@ from psychopy.visual.slider import Slider
 from psychopy.visual.text import TextStim
 from psychopy import event
 from AdjustableBar import AdjustableBar
-
+from pandas import DataFrame
 
 def static_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5):
 
@@ -82,7 +82,9 @@ def static_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5):
     for b in bars.values():
         b.autoDraw = False
 
-    return [more_likely_scale.getRating(), times_likely_scale.getRating()]
+    return {'more_likely': more_likely_scale.getRating(),
+            'times_likely': times_likely_scale.getRating()
+            }
 
 
 def dynamic_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5):
@@ -98,24 +100,24 @@ def dynamic_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5)
                                      width=axis.width / 2, height=axis.height / 4,
                                      lineColor="#000000", fillColor="#000000", lineWidth=3,
                                      name="A_major", focused=False),
-            "B_major": AdjustableBar(win,
+            "notA_major": AdjustableBar(win,
                                      bounds=(axis.bounds[3], axis.bounds[1]),
                                      pos=(axis.bounds[3] + axis.width / 4, axis.bounds[2] + axis.height / 4),
                                      width=axis.width / 2, height=axis.height / 4,
                                      lineColor="#000000", fillColor="#0000FF", lineWidth=3,
-                                     name="B_major", focused=False),
+                                     name="notA_major", focused=False),
             "A_minor": AdjustableBar(win,
                                      bounds=(axis.bounds[3], axis.bounds[3] + axis.width / 2),
                                      pos=(axis.bounds[3] + axis.width / 8, axis.bounds[0] - axis.height / 4),
                                      width=axis.width / 4, height=axis.height / 4,
                                      lineColor="#000000", fillColor="#f9f50c", lineWidth=3,
                                      name="A_minor", focused=False),
-            "B_minor": AdjustableBar(win,
+            "notA_minor": AdjustableBar(win,
                                      bounds=(axis.bounds[3], axis.bounds[3] + axis.width / 2),
                                      pos=(axis.bounds[3] + axis.width / 8, axis.bounds[2] + axis.height / 4),
                                      width=axis.width / 4, height=axis.height / 4,
                                      lineColor="#000000", fillColor="#FF0000", lineWidth=3,
-                                     name="B_minor", focused=False)
+                                     name="notA_minor", focused=False)
             }
 
     names = list(bars.keys())  # use this to keep track of what bars we need to add
@@ -257,7 +259,23 @@ def dynamic_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5)
     for b in bars.values():
         b.autoDraw = False
 
-    return [more_likely_scale.getRating(), times_likely_scale.getRating()]
+    # Compute the implied joint distribution
+    est_pA = bars['A_major'].width / axis.width
+    est_pnotA = bars['notA_major'].width / axis.width
+    est_pA_B = bars['A_minor'].width / axis.width
+    est_pnotA_B = bars['notA_minor'].width / axis.width
+    est_pA_notB = est_pA - est_pA_B
+    est_pnotA_notB = est_pnotA - est_pnotA_B
+    joint = DataFrame({'A': [est_pA_B, est_pA_notB],
+                       'notA': [est_pnotA_B, est_pnotA_notB]
+                       },
+                      index=['B', 'notB']
+                      )
+
+    return {'more_likely': more_likely_scale.getRating(),
+            'times_likely': times_likely_scale.getRating(),
+            'joint': joint
+            }
 
 
 def validate_probabilities(*args):
@@ -272,6 +290,6 @@ def create_problem_textstim(win, problem_text, pA, pB_given_A, pB_given_notA):
                                                             pB_given_A=pB_given_A * 100,
                                                             pB_given_notA=pB_given_notA * 100
                                                             ),
-                   pos=(0, .85), height=.075, wrapWidth=1.5)
+                   pos=(0, .8), height=.07, wrapWidth=1.5)
     txt.autoDraw = True
     return txt

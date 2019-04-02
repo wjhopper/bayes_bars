@@ -59,6 +59,7 @@ def AxisStim(win, pos=(0, 0), width=1.5, height=1, y_labels=("A", "B")):
     x = BufferImageStim(win, stim=stimlist, rect=capture_rect,
                         pos=(pos[0]/win.size[0]/2, pos[1]/win.size[1]/2)
                         )
+    x.events = y_labels
     x.width = width
     x.height = height
     # These adjustments to the bounds are because the screenshot rectangle is asymmetric around the origin.
