@@ -5,9 +5,25 @@ from psychopy.visual.text import TextStim
 from psychopy import event
 from AdjustableBar import AdjustableBar
 from pandas import DataFrame
+from psychopy.visual.bufferimage import BufferImageStim
+
 
 def static_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5):
+    """
 
+    :param axis: The xy axis where the bars are drawn.
+    :type axis: BufferImageStim
+    :param problem_text: A list of 3 string objects. Each string object should contain 1 str.format code where a
+      floating point number is to be inserted
+    :type problem_text: list of str
+    :param pA:
+    :type pA: float
+    :param pB_given_A:
+    :type pB_given_A: float
+    :param pB_given_notA:
+    :type pB_given_notA: floar
+    :return: A dict
+    """
     validate_probabilities(pA, pB_given_A, pB_given_notA)
 
     win = axis.win
