@@ -10,9 +10,9 @@ event.globalKeys.add(key='q', func=core.quit, name='shutdown')
 # pB_given_A=.1
 # pB_given_notA = .95
 
-text = ["- {pA}% of people eat cookies.",
-        "- {pB_given_A}% of people who eat cookies also eat brownies.",
-        "- {pB_given_notA}% of people who do not eat cookies eat brownies"
+text = ["- {pA:.0f}% of people eat cookies.",
+        "- {pB_given_A:.0f}% of people who eat cookies also eat brownies.",
+        "- {pB_given_notA:.0f}% of people who do not eat cookies eat brownies"
         ]
 
 ax = AxisStim(win, pos=(0, .125), height=1, width=1, y_labels=('Eats\nCookies', "Doesn't Eat\nCookies"))  # autodraws
