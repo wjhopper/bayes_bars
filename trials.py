@@ -5,6 +5,7 @@ from psychopy.visual.text import TextStim
 from psychopy import event
 from AdjustableBar import AdjustableBar
 from pandas import DataFrame
+from axis import AxisStim
 
 
 def static_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5):
@@ -277,6 +278,7 @@ def dynamic_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5)
     accept_box.autoDraw = False
     for b in bars.values():
         b.autoDraw = False
+        b.handle.autoDraw = False
 
     # Compute the implied joint distribution
     est_pA = bars['A_major'].width / axis.width
@@ -312,3 +314,92 @@ def create_problem_textstim(win, problem_text, pA, pB_given_A, pB_given_notA):
                    pos=(0, .8), height=.07, wrapWidth=1.5)
     txt.autoDraw = True
     return txt
+
+
+def feedback(win, events, pA, pB_given_A, pB_given_notA, joint):
+
+    correct_axis = AxisStim(win, height=.75, width=1, pos=(0, .5), y_labels=events.values())
+    correct_axis.autoDraw = False
+    correct_title = TextStim(win, pos=(0, .9), height=.06, text="Correct Bars")
+
+    correct_bars = {"A_major": Rect(win,
+                                    pos=(correct_axis.bounds[3] + correct_axis.width * pA / 2,
+                                         correct_axis.bounds[0] - correct_axis.height / 4),
+                                    width=correct_axis.width * pA, height=correct_axis.height / 4,
+                                    lineColor="#000000", fillColor="#000000", lineWidth=3,
+                                    name="A_major"),
+                    "notA_major": Rect(win,
+                                       pos=(correct_axis.bounds[3] + correct_axis.width * (1-pA) / 2,
+                                            correct_axis.bounds[2] + correct_axis.height / 4),
+                                       width=correct_axis.width * (1 - pA), height=correct_axis.height / 4,
+                                       lineColor="#000000", fillColor="#0000FF", lineWidth=3,
+                                       name="B_major"),
+                    "A_minor": Rect(win,
+                                    pos=(correct_axis.bounds[3] + (correct_axis.width * pA * pB_given_A) / 2,
+                                         correct_axis.bounds[0] - correct_axis.height / 4),
+                                    width=correct_axis.width * pA * pB_given_A, height=correct_axis.height / 4,
+                                    lineColor="#000000", fillColor="#f9f50c", lineWidth=3,
+                                    name="A_minor"),
+                    "notA_minor": Rect(win,
+                                       pos=(correct_axis.bounds[3] + (correct_axis.width * (1-pA) * pB_given_notA) / 2,
+                                            correct_axis.bounds[2] + correct_axis.height / 4),
+                                       width=correct_axis.width * (1 - pA) * pB_given_notA, height=correct_axis.height / 4,
+                                       lineColor="#000000", fillColor="#FF0000", lineWidth=3,
+                                       name="B_minor")
+                    }
+
+    est_axis = AxisStim(win, height=.75, width=1, pos=(0, -.4), y_labels=events.values())
+    est_axis.autoDraw = False
+    est_title = TextStim(win, pos=(0, 0), height=.06, text="Your Bars")
+
+    est_pA = joint.loc[:, 'A'].sum()
+    est_pB_given_A = joint.loc['B', 'A'] / est_pA
+    est_pB_given_notA = joint.loc['B', 'notA'] / (1 - est_pA)
+
+    est_bars = {"A_major": Rect(win,
+                                pos=(est_axis.bounds[3] + est_axis.width * est_pA / 2,
+                                     est_axis.bounds[0] - est_axis.height / 4),
+                                width=est_axis.width * est_pA, height=est_axis.height / 4,
+                                lineColor="#000000", fillColor="#000000", lineWidth=3,
+                                name="A_major"),
+                "notA_major": Rect(win,
+                                   pos=(est_axis.bounds[3] + est_axis.width * (1 - est_pA) / 2,
+                                        est_axis.bounds[2] + est_axis.height / 4),
+                                   width=est_axis.width * (1 - est_pA), height=est_axis.height / 4,
+                                   lineColor="#000000", fillColor="#0000FF", lineWidth=3,
+                                   name="B_major"),
+                "A_minor": Rect(win,
+                                pos=(est_axis.bounds[3] + (est_axis.width * est_pA * est_pB_given_A) / 2,
+                                     est_axis.bounds[0] - est_axis.height / 4),
+                                width=est_axis.width * est_pA * est_pB_given_A, height=est_axis.height / 4,
+                                lineColor="#000000", fillColor="#f9f50c", lineWidth=3,
+                                name="A_minor"),
+                "notA_minor": Rect(win,
+                                   pos=(est_axis.bounds[3] + (est_axis.width * (1 - est_pA) * est_pB_given_notA) / 2,
+                                        est_axis.bounds[2] + est_axis.height / 4),
+                                   width=est_axis.width * (1 - est_pA) * est_pB_given_notA, height=est_axis.height / 4,
+                                   lineColor="#000000", fillColor="#FF0000", lineWidth=3,
+                                   name="B_minor")
+                }
+
+    odds = (pA * pB_given_A)/((1-pA) * pB_given_notA)
+    if odds > 1:
+        more_likely = events['A']
+        times_likely = odds
+    else:
+        more_likely = events['notA']
+        times_likely = 1/odds
+
+    correct_answer = TextStim(win, pos=(0, -.9), height=.07,
+                              text="{:s} is {:.1f} times more likely".format(more_likely, times_likely))
+
+    est_axis.draw()
+    correct_axis.draw()
+    est_title.draw()
+    correct_title.draw()
+    correct_answer.draw()
+    for _, bar in correct_bars.items():
+        bar.draw()
+    for _, bar in est_bars.items():
+        bar.draw()
+    win.flip()

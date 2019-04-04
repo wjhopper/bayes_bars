@@ -1,6 +1,6 @@
 from psychopy import visual, core, event
 from axis import AxisStim
-from trials import static_trial, dynamic_trial
+from trials import static_trial, dynamic_trial, feedback
 
 win = visual.Window([1280, 768])
 event.globalKeys.add(key='q', func=core.quit, name='shutdown')
@@ -42,5 +42,7 @@ ratio = responses['joint'].loc['B', indices[0]] / responses['joint'].loc['B', in
 print("Answer based on bars: {} is {:.1f} more likely".format(events[bars_morelikely], ratio))
 ax.autoDraw = False
 
+feedback(win, events, pA, pB_given_A, pB_given_notA, joint=responses['joint'])
+core.wait(5)
 win.close()
 
