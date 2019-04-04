@@ -23,7 +23,7 @@ def AxisStim(win, pos=(0, 0), width=1.5, height=1, y_labels=("A", "B")):
     stimlist = [y_axis, x_axis]
 
     for label, p in zip(y_labels, [bounds[0]-height/4, bounds[2]+height/4]):
-        t = TextStim(win, label, pos=(bounds[3]-(height/8), p), height=height/15, color="#00000")
+        t = TextStim(win, label, pos=(bounds[3]-(height/8), p), height=height/15, color="#00000", wrapWidth=.03)
         stimlist.append(t)
 
     for i, p in enumerate([bounds[3]] + x_axis_breaks):

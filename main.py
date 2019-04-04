@@ -9,7 +9,7 @@ pA = .2
 pB_given_A = .1
 pB_given_notA = .95
 
-events = {'A': "Eat's Cookies", "notA": "Doesn't Eat Cookies"}
+events = {'A': "Eats Cookies", "notA": "Doesn't Eat Cookies"}
 text = ["{pA:.0f}% of people eat cookies.",
         "{pB_given_A:.0f}% of people who eat cookies also eat brownies.",
         "{pB_given_notA:.0f}% of people who do not eat cookies eat brownies",
@@ -22,7 +22,7 @@ win.flip()
 core.wait(4)
 
 # Be careful, the axis autodraws
-ax = AxisStim(win, pos=(0, .05), height=.9, width=1, y_labels=('Eats\nCookies', "Doesn't Eat\nCookies"))
+ax = AxisStim(win, pos=(0, .05), height=.9, width=1, y_labels=events.values())
 
 responses = static_trial(ax, text, pA=.2, pB_given_A=pB_given_A, pB_given_notA=pB_given_notA)
 print("Participant response: {} is {:.1f} more likely".format(responses['more_likely'], responses['times_likely']))
@@ -40,6 +40,7 @@ bars_morelikely = responses['joint'].loc['B'].idxmax()
 indices = ('A', 'notA') if bars_morelikely == 'A' else ('notA', 'A')
 ratio = responses['joint'].loc['B', indices[0]] / responses['joint'].loc['B', indices[1]]
 print("Answer based on bars: {} is {:.1f} more likely".format(events[bars_morelikely], ratio))
+ax.autoDraw = False
 
 win.close()
 
