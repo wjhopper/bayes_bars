@@ -5,24 +5,27 @@ from psychopy.visual.text import TextStim
 from psychopy import event
 from AdjustableBar import AdjustableBar
 from pandas import DataFrame
-from psychopy.visual.bufferimage import BufferImageStim
 
 
 def static_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5):
     """
+    Barplot showing the implied joint probability distribution of two discrete events. Participant must respond with
+    whether an event A or not-A is more likely, and rate how many times more likely the chosen event is.
 
-    :param axis: The xy axis where the bars are drawn.
-    :type axis: BufferImageStim
+    :param axis: The xy axis where the bars are drawn. Created with AxisStim function.
     :param problem_text: A list of 3 string objects. Each string object should contain 1 str.format code where a
       floating point number is to be inserted
     :type problem_text: list of str
-    :param pA:
+    :param pA: The probability of an event A
     :type pA: float
-    :param pB_given_A:
+    :param pB_given_A: The probability of an event B given event A is observed
     :type pB_given_A: float
-    :param pB_given_notA:
-    :type pB_given_notA: floar
-    :return: A dict
+    :param pB_given_notA: The probability of an event B given the converse of event A has been observed.
+    :type pB_given_notA: float
+    :return: A dict with the ratings given by the participant. The 'more_likely' element gives the name of the event
+      rated more likely by the participant. The 'times_likely' element gives the odds ratio in favor of the event
+      rated more likely.
+    :rtype: dict[str, float]
     """
     validate_probabilities(pA, pB_given_A, pB_given_notA)
 
