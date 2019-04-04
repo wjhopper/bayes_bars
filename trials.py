@@ -1,3 +1,4 @@
+from psychopy.visual.window import Window
 from psychopy.visual.rect import Rect
 from psychopy.visual.ratingscale import RatingScale
 from psychopy.visual.slider import Slider
@@ -23,9 +24,9 @@ def static_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5):
     :type pB_given_A: float
     :param pB_given_notA: The probability of an event B given the converse of event A has been observed.
     :type pB_given_notA: float
-    :return: A dict with the ratings given by the participant. The 'more_likely' element gives the name of the event
-      rated more likely by the participant. The 'times_likely' element gives the odds ratio in favor of the event
-      rated more likely.
+    :return: A dict with two elements holding the ratings given by the participant. The 'more_likely' element gives the
+      name of the event  rated more likely by the participant. The 'times_likely' element gives the odds ratio in favor
+      of the event rated more likely.
     :rtype: dict[str, float]
     """
     validate_probabilities(pA, pB_given_A, pB_given_notA)
@@ -108,7 +109,24 @@ def static_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5):
 
 
 def dynamic_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5):
+    """
+    Barplot that the participant may adjust with the mouse to show the implied joint probability distribution of two
+    discrete events. Participant must respond with whether an event A or not-A is more likely, and rate how many
+    times more likely the chosen event is.
 
+    :param axis: The xy axis where the bars are drawn. Created with AxisStim function.
+    :param list[str] problem_text: A list of 3 string objects. Each string object should contain 1 str.format code where a
+      floating point number is to be inserted
+    :param float pA: The probability of an event A
+    :param float pB_given_A: The probability of an event B given event A is observed
+    :param float pB_given_notA: The probability of an event B given the converse of event A has been observed.
+    :return: A dictionary object with 3 elements holding the ratings given by the participant and the joint distribution
+      implied by the bars they drew. The 'more_likely' element gives the name of the event rated more likely by the
+      participant. The 'times_likely' element gives the odds ratio in favor of the event rated more likely. The 'joint'
+      element holds the joint distribution as a 2x2 contingency table. The A event is along the rows, the B event is
+      along the columns
+    :rtype: dict[str, DataFrame, float]
+    """
     validate_probabilities(pA, pB_given_A, pB_given_notA)
 
     win = axis.win
@@ -317,8 +335,23 @@ def create_problem_textstim(win, problem_text, pA, pB_given_A, pB_given_notA):
 
 
 def feedback(win, events, pA, pB_given_A, pB_given_notA, joint):
+    """
+    Give visual feedback about how well the bars adjusted by the participant match the target, correct set of bars.
 
-    correct_axis = AxisStim(win, height=.75, width=1, pos=(0, .5), y_labels=events.values())
+    
+    :param psychopy.visual.window.Window win: A PsychoPy window object
+    :param dict[str] events: A dictionary with 2 string objects that describe an event 'A' (e.g., Eats Cookies) and its
+      complement 'notA' (e.g., Doesn't Eat Cookies).
+    :param float pA: The probability of an event A. This should correspond to the probability of the event described in
+      events['A']
+    :param float pB_given_A: The probability of an event B given event A is observed
+    :param float pB_given_notA: The probability of an event B given the converse of event A has been observed.
+    :param DataFrame joint: A 2x2 pandas DataFrame describing a joint probability distribution. Requires column keys 'A'
+       and 'notA' and row indices 'B' and 'notB'. This DataFrame is intended to be obtained from the output of the
+       dynamic_trial function.
+    :rtype: None
+    """
+    correct_axis = AxisStim(win, height=.75, width=1, pos=(0, .5), y_labels=(events['A'], events['notA']))
     correct_axis.autoDraw = False
     correct_title = TextStim(win, pos=(0, .9), height=.06, text="Correct Bars")
 
