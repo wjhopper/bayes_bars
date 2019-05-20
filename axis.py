@@ -13,7 +13,7 @@ def AxisStim(win, pos=(0, 0), width=1.5, height=1, y_labels=("A", "B")):
                                       [bounds[3], bounds[0]-height/4], [bounds[3], bounds[0]]],
                        lineColor="#00000", lineWidth=3)
 
-    x_axis_breaks = [round(bounds[3] + width * (x/10), 2) for x in range(1,11)]
+    x_axis_breaks = [round(bounds[3] + width * (x/10), 2) for x in range(1, 11)]
     x_axis_break_vertices = list(zip(chain.from_iterable([[x, x, x] for x in x_axis_breaks]),
                                      [bounds[2], bounds[2]-.025, bounds[2]] * len(x_axis_breaks))
                                  )
@@ -43,7 +43,7 @@ def AxisStim(win, pos=(0, 0), width=1.5, height=1, y_labels=("A", "B")):
     # left = min([min(s.verticesPix[:, 0]) for s in stimlist]) + 2
     # capture_rect = [left/win.size[0]/2, top/win.size[1]/2, right/win.size[0]/2, bottom/win.size[1]/2]
 
-    # The capturing rectangle is really really confusing (I think there is an implemenation bug, not just documentation)
+    # The capturing rectangle is really really confusing (I think there is an implementation bug)
     # Basically the docs says you should give a list of edges in [left top right bottom] order in norm coordinates
     # But the order that actually makes it work is [left bottom right top]
     # If you have these edges already you also have to change the sign, to make a "bottom" coordinate into a "top"!
@@ -69,7 +69,10 @@ def AxisStim(win, pos=(0, 0), width=1.5, height=1, y_labels=("A", "B")):
     # The drawback to this whole thing is that the axis itself is not centered, but rather the screenshot of the axis
     # (i.e., the axis plus it's labels plus small margin) are centered.
     one_px_proportions = (1/win.size[0], 1/win.size[1])
-    x.bounds = [bounds[0]+.05, bounds[1], bounds[2] + .05, bounds[3] + (.23/2) - (.04/2) + 2*one_px_proportions[0]]
+    x.bounds = [bounds[0] + .05,
+                bounds[1] + (.23/2) - (.04/2) + 2*one_px_proportions[0],
+                bounds[2] + .05,
+                bounds[3] + (.23/2) - (.04/2) + 2*one_px_proportions[0]]
     x.autoDraw = True
 
     return x
