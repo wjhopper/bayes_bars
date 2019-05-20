@@ -43,6 +43,6 @@ print("Answer based on bars: {} is {:.1f} more likely".format(events[bars_moreli
 ax.autoDraw = False
 
 feedback(win, events, pA, pB_given_A, pB_given_notA, joint=responses['joint'])
-core.wait(5)
+
 win.close()
 

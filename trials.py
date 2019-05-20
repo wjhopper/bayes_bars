@@ -435,4 +435,15 @@ def feedback(win, events, pA, pB_given_A, pB_given_notA, joint):
         bar.draw()
     for _, bar in est_bars.items():
         bar.draw()
+
+    next_box = Rect(win, pos=(.8, -.9), height=.1, width=.25)
+    next_text = TextStim(win, pos=(.8, -.9), height=.075, text="Continue")
+    next_box.draw()
+    next_text.draw()
+
     win.flip()
+
+    mouse = event.Mouse()
+    while True:
+        if mouse.isPressedIn(next_box):
+            break
