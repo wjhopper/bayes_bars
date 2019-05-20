@@ -230,7 +230,7 @@ def dynamic_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5)
                         rect.pos = (axis.bounds[3] + rect.width / 2, rect.pos[1])
                     elif rect.bounds[1] <= drag_pos:
                         rect.handle.pos = (rect.bounds[1], rect.handle.pos[1])
-                        rect.width = rect.bounds[1] - rect.bounds[0] - .0075
+                        rect.width = rect.bounds[1] - axis.bounds[3] - .0075
                         rect.pos = (axis.bounds[3] + rect.width / 2, rect.pos[1])
                     win.flip()
 
