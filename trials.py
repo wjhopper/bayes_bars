@@ -70,7 +70,7 @@ def static_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5):
     times_likely_prompt = TextStim(win, pos=(.3, -.6), text="How many times more likely?", height=.06, color='#FFFFFF')
     times_likely_prompt.autoDraw = True
     times_likely_scale = Slider(win, pos=(.3, -.7), ticks=[1] + list(range(5, 51, 5)),
-                                granularity=.1, style="marker")
+                                granularity=.5, style="marker")
     times_likely_scale.markerPos = 1
     times_likely_scale.rating = 1
     times_likely_scale.marker.size = (times_likely_scale._tickL / 5,
@@ -265,7 +265,7 @@ def dynamic_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5)
     times_likely_prompt = TextStim(win, pos=(.3, -.6), text="How many times more likely?", height=.06, color='#FFFFFF')
     times_likely_prompt.autoDraw = True
     times_likely_scale = Slider(win, pos=(.3, -.7), ticks=[1] + list(range(5, 51, 5)),
-                                granularity=.1, style="marker")
+                                granularity=.5, style="marker")
     times_likely_scale.markerPos = 1
     times_likely_scale.rating = 1
     times_likely_scale.marker.size = (times_likely_scale._tickL / 5,
