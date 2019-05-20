@@ -8,7 +8,7 @@ class AdjustableBar(Rect):
         super(AdjustableBar, self).__init__(win, **kwargs)
         # Create the "handle" point
         self.handle = Rect(win, pos=(self.pos[0] + self.width/2, self.pos[1]), width=.015, height=.015 * (win.size[0]/win.size[1]),
-                           lineColor="#000000", fillColor="#0000FF", lineWidth=1, autoDraw=focused)
+                           lineColor="#000000", fillColor="#FF0000", lineWidth=1, autoDraw=focused)
         self._focused = focused
         self._bounds = bounds
         self.adjusted = False
