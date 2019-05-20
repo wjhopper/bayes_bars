@@ -24,7 +24,7 @@ core.wait(4)
 # Be careful, the axis autodraws
 ax = AxisStim(win, pos=(0, .05), height=.9, width=1, y_labels=events.values())
 
-responses = static_trial(ax, text, pA=.2, pB_given_A=pB_given_A, pB_given_notA=pB_given_notA)
+responses = static_trial(ax, text, pA=pA, pB_given_A=pB_given_A, pB_given_notA=pB_given_notA)
 print("Participant response: {} is {:.1f} more likely".format(responses['more_likely'], responses['times_likely']))
 ax.autoDraw = False
 
@@ -34,7 +34,7 @@ win.flip()
 core.wait(4)
 
 ax.autoDraw = True
-responses = dynamic_trial(ax, text, pB_given_A=pB_given_A, pB_given_notA=pB_given_notA)
+responses = dynamic_trial(ax, text, pA=pA, pB_given_A=pB_given_A, pB_given_notA=pB_given_notA)
 print("Participant response: {} is {:.1f} more likely".format(responses['more_likely'], responses['times_likely']))
 bars_morelikely = responses['joint'].loc['B'].idxmax()
 indices = ('A', 'notA') if bars_morelikely == 'A' else ('notA', 'A')
