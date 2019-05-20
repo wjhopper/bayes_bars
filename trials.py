@@ -255,6 +255,10 @@ def dynamic_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5)
 
     prompt.autoDraw = False
 
+    # Remove handle from screen
+    for r in active_rects:
+        r.focused = False
+
     more_likely_prompt = TextStim(win, pos=(-.6, -.6), text="Which is more likely?", height=.06, color='#FFFFFF')
     more_likely_prompt.autoDraw = True
     more_likely_scale = RatingScale(win, pos=(-.6, -.7), choices=['Eats Cookies', "Doesn't Eat Cookies"],
