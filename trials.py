@@ -56,7 +56,7 @@ def static_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5):
                                pos=(axis.bounds[3] + (axis.width * (1-pA) * pB_given_notA) / 2,
                                     axis.bounds[2] + axis.height / 4),
                                width=axis.width * (1 - pA) * pB_given_notA, height=axis.height / 4,
-                               lineColor="#000000", fillColor="#FF0000", lineWidth=3,
+                               lineColor="#000000", fillColor="#f9f50c", lineWidth=3,
                                name="B_minor", autoDraw=True)
             }
 
@@ -139,11 +139,11 @@ def dynamic_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5)
                                      lineColor="#000000", fillColor="#000000", lineWidth=3,
                                      name="A_major", focused=False),
             "notA_major": AdjustableBar(win,
-                                     bounds=(axis.bounds[3], axis.bounds[1]),
-                                     pos=(axis.bounds[3] + axis.width / 4, axis.bounds[2] + axis.height / 4),
-                                     width=axis.width / 2, height=axis.height / 4,
-                                     lineColor="#000000", fillColor="#0000FF", lineWidth=3,
-                                     name="notA_major", focused=False),
+                                        bounds=(axis.bounds[3], axis.bounds[1]),
+                                        pos=(axis.bounds[3] + axis.width / 4, axis.bounds[2] + axis.height / 4),
+                                        width=axis.width / 2, height=axis.height / 4,
+                                        lineColor="#000000", fillColor="#0000FF", lineWidth=3,
+                                        name="notA_major", focused=False),
             "A_minor": AdjustableBar(win,
                                      bounds=(axis.bounds[3], axis.bounds[3] + axis.width / 2),
                                      pos=(axis.bounds[3] + axis.width / 8, axis.bounds[0] - axis.height / 4),
@@ -151,11 +151,11 @@ def dynamic_trial(axis, problem_text, pA=0.5, pB_given_A=0.5, pB_given_notA=0.5)
                                      lineColor="#000000", fillColor="#f9f50c", lineWidth=3,
                                      name="A_minor", focused=False),
             "notA_minor": AdjustableBar(win,
-                                     bounds=(axis.bounds[3], axis.bounds[3] + axis.width / 2),
-                                     pos=(axis.bounds[3] + axis.width / 8, axis.bounds[2] + axis.height / 4),
-                                     width=axis.width / 4, height=axis.height / 4,
-                                     lineColor="#000000", fillColor="#FF0000", lineWidth=3,
-                                     name="notA_minor", focused=False)
+                                        bounds=(axis.bounds[3], axis.bounds[3] + axis.width / 2),
+                                        pos=(axis.bounds[3] + axis.width / 8, axis.bounds[2] + axis.height / 4),
+                                        width=axis.width / 4, height=axis.height / 4,
+                                        lineColor="#000000", fillColor="#f9f50c", lineWidth=3,
+                                        name="notA_minor", focused=False)
             }
 
     names = list(bars.keys())  # use this to keep track of what bars we need to add
